@@ -2,7 +2,15 @@ package com.mycompany.app;
 
 public class App {
 
-	private Echoable echoable;
+	private final Echoable echoable;
+
+	public App() {
+		this.echoable = new DefaultEchoable();
+	}
+
+	public App(Echoable echoable) {
+		this.echoable = echoable;
+	}
 
 	public int addTwo(int foo) {
 		return foo + 2;
