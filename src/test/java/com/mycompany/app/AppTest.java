@@ -26,4 +26,10 @@ public class AppTest {
 		app.echo("Kamehameha!");
 		Mockito.verify(echoable).echo("WOLOLO! Kamehameha!");
 	}
+
+	@Test
+	public void testEchoWithNullArg() {
+		app.echo(null);
+		Mockito.verify(echoable).echo("WOLOLO! Nothing");
+	}
 }
