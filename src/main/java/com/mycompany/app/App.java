@@ -9,6 +9,7 @@ public class App {
 	}
 
 	public void echo(String something) {
-		echoable.echo("WOLOLO! " + something);
+		final String toEcho = something == null ? "Nothing" : something;
+		echoable.echo("WOLOLO! " + toEcho);
 	}
 }
