@@ -4,10 +4,6 @@ public class App {
 
 	private Echoable echoable;
 
-	public App() {
-		this.echoable = new DefaultEchoable();
-	}
-
 	public App(Echoable echoable) {
 		this.echoable = echoable;
 	}
