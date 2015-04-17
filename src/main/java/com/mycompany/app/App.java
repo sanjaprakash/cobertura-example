@@ -2,7 +2,7 @@ package com.mycompany.app;
 
 public class App {
 
-	private final Echoable echoable;
+	private Echoable echoable;
 
 	public App() {
 		this.echoable = new DefaultEchoable();
@@ -20,4 +20,13 @@ public class App {
 		final String toEcho = something == null ? "Nothing" : something;
 		echoable.echo("WOLOLO! " + toEcho);
 	}
+
+	public Echoable getEchoable() {
+		return echoable;
+	}
+
+	public void setEchoable(Echoable echoable) {
+		this.echoable = echoable;
+	}
+
 }
