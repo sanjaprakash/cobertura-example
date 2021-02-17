@@ -14,7 +14,7 @@ string(defaultValue: '', description: 'accept the string', name: 'git_url', trim
                           extensions: [], 
                           gitTool: 'Default', 
                           submoduleCfg: [], 
-                          userRemoteConfigs: [[url: 'https://github.com/thamunkpillai/cobertura-example.git']]
+                          userRemoteConfigs: [[url: "${params.git_url}"]]
             ])
                 
             }
