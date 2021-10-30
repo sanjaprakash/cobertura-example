@@ -1,51 +1,83 @@
-pipeline {
+pipeline{
     agent any
+    tools {
+        jdk 'Java_Home'
+        maven 'Maven_Home' 
+    }
+    triggers {
+        cron 'H H * * *'
+   }
+    options {
+        buildDiscarder logRotator(daysToKeepStr: '9', numToKeepStr: '7')
+        timeout(time: 1, unit: 'HOURS') 
+    }
+    environment{
+        tomcatweb = "/var/lib/tomcat/webapps/"
+    }
     parameters{
-gitParameter(branch: '', branchFilter: '.*', defaultValue: 'master', description: 'enter the branch name', name: 'branch', quickFilterEnabled: false, selectedValue: 'NONE', sortMode: 'NONE', tagFilter: '*', type: 'PT_BRANCH')
-string(defaultValue: '', description: 'accept the string', name: 'git_url', trim: false)
-}
-    stages {
-        stage(checkout) {
-            steps {
-                echo 'checking out the code from GIT'
-                checkout([$class: 'GitSCM', 
-                          branches: [[name: "${params.branch}"]], 
-                          doGenerateSubmoduleConfigurations: false, 
-                          extensions: [], 
-                          gitTool: 'Default', 
-                          submoduleCfg: [], 
-                          userRemoteConfigs: [[url: "${params.git_url}"]]
+        booleanParam(name: 'TEST', defaultValue: true, description: 'make it TRUE if you want to test')
+        booleanParam(name: 'DEPLOY', defaultValue: true, description: 'make it TRUE if you want to deploy')
+        gitParameter(branch: '', branchFilter: '.*', defaultValue: 'master', description: 'enter the branch name', name: 'branch', quickFilterEnabled: false, selectedValue: 'NONE', sortMode: 'NONE', tagFilter: '*', type: 'PT_BRANCH')
+    }
+stages{
+    stage('checkout'){
+        steps{
+            checkout([
+                $class: 'GitSCM', 
+                branches: [[name: "${params.branch}"]], 
+                extensions: [], 
+                userRemoteConfigs: [[url: 'https://github.com/sanjaprakash/cobertura-example.git']]
             ])
-                
-            }
-        }
-        stage(test){
-            steps{
-                echo 'test the war file'
-                tool name: 'java_home', type: 'jdk'
-                tool name: 'maven_home', type: 'maven'
-                sh 'mvn clean cobertura:cobertura -Dcobertura.report.formats=xml'
-            }
-        }
-        stage(qa){
-            steps{
-                echo 'checking the code quality'
-            }
-        }
-        stage(publish){
-            steps{
-                echo 'cobertura publish'
-                cobertura autoUpdateHealth: false, autoUpdateStability: false, coberturaReportFile: '**/target/site/cobertura/coverage.xml', conditionalCoverageTargets: '70, 0, 0', failUnhealthy: false, failUnstable: false, lineCoverageTargets: '80, 0, 0', maxNumberOfBuilds: 0, methodCoverageTargets: '80, 0, 0', onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false
-                // sh 'cp /var/lib/jenkins/workspace/practise/demo_project/target/java-tomcat-maven-example.war /var/lib/tomcat/webapps'
-            }
-        }
-        stage(build){
-            steps{
-             echo "am building"   
-              tool name: 'java_home', type: 'jdk'
-              tool name: 'maven_home', type: 'maven'
-              sh 'mvn clean install' 
-            }
         }
     }
+    stage("testing"){
+        when {
+                // Only say hello if a "greeting" is requested
+                expression { params.TEST }
+            }
+        steps{
+            echo " I am Tesing"
+            sh"""
+                mvn clean cobertura:cobertura -Dcobertura.report.formats=xml
+            """
+        }
+    }
+    stage("cobertura publish"){
+        steps{
+            cobertura autoUpdateHealth: false, 
+            autoUpdateStability: false, 
+            coberturaReportFile: '**/target/site/cobertura/coverage.xml', 
+            conditionalCoverageTargets: '70, 60, 40', 
+            lineCoverageTargets: '80, 70, 60', 
+            maxNumberOfBuilds: 0, 
+            methodCoverageTargets: '80, 60, 40', 
+            onlyStable: false, 
+            packageCoverageTargets: '80, 60, 40', 
+            sourceEncoding: 'ASCII', 
+            zoomCoverageChart: false
+        }
+    }
+    stage("build"){
+        steps{
+            echo "building"
+            // sh """
+            // mvn clean install
+            // """
+        }
+    }
+    stage("deploy"){
+        when {
+                // Only say hello if a "greeting" is requested
+                expression { params.DEPLOY }
+            }
+        steps{
+           sh "cp target/java-tomcat-maven-example.war ${tomcatweb}"
+}
+}
+}
+post{
+    always{
+        cleanWs()
+    }
+}
 }
