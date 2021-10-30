@@ -31,7 +31,7 @@ stages{
     }
     stage("testing"){
         steps{
-            echo " I am Tesing"
+            echo " This is a Tesing Demo using jenkins"
             sh"""
                 mvn clean cobertura:cobertura -Dcobertura.report.formats=xml
             """
