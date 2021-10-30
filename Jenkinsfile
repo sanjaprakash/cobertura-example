@@ -15,7 +15,6 @@ pipeline{
         tomcatweb = "/var/lib/tomcat/webapps/"
     }
     parameters{
-        booleanParam(name: 'TEST', defaultValue: true, description: 'make it TRUE if you want to test')
         booleanParam(name: 'DEPLOY', defaultValue: true, description: 'make it TRUE if you want to deploy')
         gitParameter(branch: '', branchFilter: '.*', defaultValue: 'master', description: 'enter the branch name', name: 'branch', quickFilterEnabled: false, selectedValue: 'NONE', sortMode: 'NONE', tagFilter: '*', type: 'PT_BRANCH')
     }
@@ -31,10 +30,6 @@ stages{
         }
     }
     stage("testing"){
-        when {
-                // Only say hello if a "greeting" is requested
-                expression { params.TEST }
-            }
         steps{
             echo " I am Tesing"
             sh"""
