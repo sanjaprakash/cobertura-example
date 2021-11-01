@@ -61,11 +61,12 @@ stages{
         }
     }
     stage("deploy"){
-        when {
+        //when {
                 // Only say hello if a "greeting" is requested
                 // expression { params.DEPLOY }
             }
         steps{
+            echo "Deploying"
            // sh "cp target/java-tomcat-maven-example.war ${tomcatweb}"
 }
 }
