@@ -31,7 +31,7 @@ stages{
     }
     stage("testing"){
         steps{
-            echo " This is a Tesing Demo from Visual Studio"
+            echo " This is a Tesing Demo from Visual Studio for testing purpose"
             sh"""
                 mvn clean cobertura:cobertura -Dcobertura.report.formats=xml
             """
