@@ -66,7 +66,7 @@ stages{
                 expression { params.DEPLOY }
             }
         steps{
-           sh "cp target/java-tomcat-maven-example.war ${tomcatweb}"
+              sh "cp target/java-tomcat-maven-example.war ${tomcatweb}"
 }
 }
 }
