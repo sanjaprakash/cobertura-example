@@ -29,8 +29,6 @@ stages{
             ])
         }
     }
-    stage("Cobertura_ParallelStage"){
-	parallel{
     stage("Cobertura Build"){
         steps{
             echo " This is a Tesing Demo from Visual Studio for testing purpose"
@@ -55,8 +53,6 @@ stages{
             zoomCoverageChart: false
         }
 		}
-    }
-    }
     stage("build"){
         steps{
             echo "building"
