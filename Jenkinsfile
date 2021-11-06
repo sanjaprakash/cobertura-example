@@ -30,7 +30,7 @@ stages{
         }
     }
     stage("Cobertura_ParallelStage"){
-	steps{
+	parallel{
     stage("Cobertura Build"){
         steps{
             echo " This is a Tesing Demo from Visual Studio for testing purpose"
