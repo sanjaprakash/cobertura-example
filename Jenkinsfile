@@ -29,7 +29,8 @@ stages{
             ])
         }
     }
-    stage("testing"){
+    stage("Cobertura_ParallelStage"){
+    stage("Cobertura Build"){
         steps{
             echo " This is a Tesing Demo from Visual Studio for testing purpose"
             sh"""
@@ -51,6 +52,7 @@ stages{
             sourceEncoding: 'ASCII', 
             zoomCoverageChart: false
         }
+    }
     }
     stage("build"){
         steps{
