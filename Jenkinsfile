@@ -30,6 +30,7 @@ stages{
         }
     }
     stage("Cobertura_ParallelStage"){
+	steps{
     stage("Cobertura Build"){
         steps{
             echo " This is a Tesing Demo from Visual Studio for testing purpose"
@@ -37,6 +38,7 @@ stages{
                 mvn clean cobertura:cobertura -Dcobertura.report.formats=xml
             """
         }
+		
     }
     stage("cobertura publish"){
         steps{
@@ -52,6 +54,7 @@ stages{
             sourceEncoding: 'ASCII', 
             zoomCoverageChart: false
         }
+		}
     }
     }
     stage("build"){
